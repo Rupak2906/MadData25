@@ -1,14 +1,15 @@
 import { useState } from 'react'
-import reactLogo from '../assets/react.svg'
-import viteLogo from '/vite.svg'
 import '../App.css'
-
 import { Button, Table} from "react-bootstrap";
-
-import Dropdown from 'react-bootstrap/Dropdown';
+import PlayerDropDown from './PlayerDropDown';
 
 const positions = ['PG', 'SG', 'SF', 'PF', 'C'];
 
+
+/*
+      SAMPLE DATA
+      PLAYERS WILL BE HERE, SUBJECT TO CHANGE WHEN THEY ARE DONE
+*/
 const playersByPosition = {
   PG: ['Stephen Curry', 'Chris Paul', 'Damian Lillard'],
   SG: ['James Harden', 'Klay Thompson', 'Bradley Beal'],
@@ -17,6 +18,10 @@ const playersByPosition = {
   C: ['Nikola Jokic', 'Joel Embiid', 'Rudy Gobert'],
 };
 
+/*
+      SAMPLE DATA
+      PLAYERS WILL BE HERE, SUBJECT TO CHANGE WHEN THEY ARE DONE
+*/
 const bestPlayers = {
   PG: 'Stephen Curry',
   SG: 'James Harden',
@@ -41,6 +46,9 @@ function App() {
       ...selectedPlayers,
       [position]: event.target.value,
     });
+
+    selectedPlayers[pos] = event.target.value;
+    console.log(selectedPlayers)
   };
 
   const handleCompare = () => {
@@ -51,38 +59,16 @@ function App() {
         return;
       }
     }
+    console.log(selectedPlayers)
     setShowComparison(true);
   };
 
   const [selected, setSelected] = useState("Select an option");
-  
-  const options = ["Option 1", "Option 2", "Option 3"];
-
-  //Hide the visibility of other elts
-  // const switch_visibility = () => {
-
-  // }
 
   return (
     
     
-    <div >
-
-      <Dropdown>
-      <Dropdown.Toggle variant="secondary" id="dropdown-basic">
-        {selected}
-      </Dropdown.Toggle>
-      <Dropdown.Menu>
-        {options.map((option, index) => (
-          <Dropdown.Item
-            key={index}
-            onClick={() => setSelected(option)}
-          >
-            {option}
-          </Dropdown.Item>
-        ))}
-      </Dropdown.Menu>
-    </Dropdown>
+    <div>
 
 
       <h1>NBA Player Comparison</h1>
@@ -91,30 +77,37 @@ function App() {
           {positions.map((pos) => (
             <div key={pos} style={{ marginBottom: '10px' }}>
               <label>
-                {pos}:
-                <select
+                
+                {pos}: <PlayerDropDown onClick = {(e) => {
+                  handleChange(pos, e);
+                  selectedPlayers[pos] = e.target.text;
+                  console.log(selectedPlayers);
+                }
+                }{...playersByPosition[pos]}></PlayerDropDown>
+                
+                {/* <select
                   value={selectedPlayers[pos]}
                   onChange={(e) => handleChange(pos, e)}
                   style={{ marginLeft: '10px', padding: '5px' }}
-                >
-                  <option value="">Select a player</option>
-                  {playersByPosition[pos].map((player) => (
-                    <option key={player} value={player}>
-                      {player}
-                    </option>
-                  ))}
-                </select>
+                > */}
+                  {/* <option value="">Select a player</option>
+                  // {playersByPosition[pos].map((player) => (
+                  //   <option key={player} value={player}>
+                  //     {player}
+                  //   </option>
+                  // ))}
+                </select> */}
               </label>
             </div>
           ))}
-          <Button onClick={handleCompare}>
+          <Button onClick={handleCompare} variant="success">
             Compare
           </Button>
         </div>
       ) : (
         <div>
           <h2>Comparison Results</h2>
-          <Table>
+          <Table variant="dark" align='center'>
             <thead>
               <tr>
                 <th style={{ border: '1px solid #ddd', padding: '8px' }}>Position</th>
@@ -125,9 +118,9 @@ function App() {
             <tbody>
               {positions.map((pos) => (
                 <tr key={pos}>
-                  <td style={{ border: '1px solid #ddd', padding: '8px' }}>{pos}</td>
-                  <td style={{ border: '1px solid #ddd', padding: '8px' }}>{selectedPlayers[pos]}</td>
-                  <td style={{ border: '1px solid #ddd', padding: '8px' }}>{bestPlayers[pos]}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '10px' }}>{pos}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '10px' }}>{selectedPlayers[pos]}</td>
+                  <td style={{ border: '1px solid #ddd', padding: '10px' }}>{bestPlayers[pos]}</td>
                 </tr>
               ))}
             </tbody>
