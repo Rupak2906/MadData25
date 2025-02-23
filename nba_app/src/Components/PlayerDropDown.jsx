@@ -45,13 +45,18 @@ export default function PlayerDropDown(props, selectedPlayers) {
             backgroundColor: '#fff',
             border: '1px solid #ccc',
             boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
-            zIndex: 1000,
+            zIndex: 1000
           }}
         >
 
-          <a href="#option1" onClick = {handleChange} style={itemStyle}>{props["0"]}</a>
-          <a href="#option2" onClick = {handleChange} style={itemStyle}>{props["1"]}</a>
-          <a href="#option3" onClick = {handleChange} style={itemStyle}>{props["2"]}</a>
+          {/* <a href="#option1" onClick = {handleChange} style={itemStyle}>{props["0"]}</a>
+          <a href="#option2" onClick = {handleChange} style={itemStyle}>{props["5"]}</a>
+          <a href="#option3" onClick = {handleChange} style={itemStyle}>{props["2"]}</a> */}
+          {Object.keys(props).map((key, index) => (
+          <a key={key} href={`#option${index + 1}`} onClick={handleChange} style={itemStyle}>
+            {props[key]}
+          </a>
+          ))}
         </div>
       )}
     </div>

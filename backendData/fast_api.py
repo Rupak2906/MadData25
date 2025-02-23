@@ -21,7 +21,7 @@ app.add_middleware(
     allow_headers=["*"],           # Allowed HTTP headers
 )
 
-# Sample root endpoint
+
 @app.get("/center")
 def read_c():
     return get_json_data("NBA_C.csv")
