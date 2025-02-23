@@ -13,10 +13,12 @@ export default function PlayerDropDown(props, selectedPlayers) {
 
   // Handle the selection change
   const handleChange = (event) => {
-    console.log(5);
     setIsOpen(!isOpen);
     setSelectedOption(event.target.text);
   };
+  // console.log(props.onClick);
+  <div onClick={props.onClick}>
+  </div>
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -32,7 +34,7 @@ export default function PlayerDropDown(props, selectedPlayers) {
   }, [isOpen]);
 
   return (
-    <div style={{ position: 'relative', display: 'inline-block' }} ref={dropdownRef}>
+    <div onClick = {props.onClick} style={{ position: 'relative', display: 'inline-block' }} ref={dropdownRef}>
       <button onClick={handleToggle}>{selectedOption}</button>
       {isOpen && (
         <div

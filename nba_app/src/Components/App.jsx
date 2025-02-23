@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect} from 'react'
 import '../App.css'
 import { Button, Table} from "react-bootstrap";
 import PlayerDropDown from './PlayerDropDown';
@@ -30,7 +30,67 @@ const bestPlayers = {
   C: 'Nikola Jokic',
 };
 
+let center;
+let powerForward;
+let pointGuard;
+let shootingGuard;
+let smallForward;
+
+
+
 function App() {
+
+  useEffect(() => {
+    // Make a GET request to the FastAPI endpoint
+    fetch('http://localhost:8000/center')
+      .then(res => res.json())
+      .then(data => {
+        center = data;
+      })
+      .catch(error => console.error('Error:', error));
+  }, []);
+
+  useEffect(() => {
+  // Make a GET request to the FastAPI endpoint
+  fetch('http://localhost:8000/power-forward')
+    .then(response => response.json())
+    .then(data => {
+      powerForward = data;
+    })
+    .catch(error => console.error('Error:', error));
+}, []);
+
+useEffect(() => {
+  // Make a GET request to the FastAPI endpoint
+  fetch('http://localhost:8000/point-guard')
+    .then(response => response.json())
+    .then(data => {
+      pointGuard = data;
+    })
+    .catch(error => console.error('Error:', error));
+}, []);
+
+useEffect(() => {
+  // Make a GET request to the FastAPI endpoint
+  fetch('http://localhost:8000/shooting-guard')
+    .then(response => response.json())
+    .then(data => {
+      shootingGuard = data;
+    })
+    .catch(error => console.error('Error:', error));
+}, []);
+
+useEffect(() => {
+  // Make a GET request to the FastAPI endpoint
+  fetch('http://localhost:8000/small-forward')
+    .then(response => response.json())
+    .then(data => {
+      smallForward = data;
+    })
+    .catch(error => console.error('Error:', error));
+}, []);
+
+
   const [selectedPlayers, setSelectedPlayers] = useState({
     PG: '',
     SG: '',
@@ -41,16 +101,6 @@ function App() {
 
   const [showComparison, setShowComparison] = useState(false);
 
-  const handleChange = (position, event) => {
-    setSelectedPlayers({
-      ...selectedPlayers,
-      [position]: event.target.value,
-    });
-
-    selectedPlayers[pos] = event.target.value;
-    console.log(selectedPlayers)
-  };
-
   const handleCompare = () => {
     // Ensure that a player is selected for every position
     for (let pos of positions) {
@@ -59,11 +109,15 @@ function App() {
         return;
       }
     }
-    console.log(selectedPlayers)
     setShowComparison(true);
   };
 
-  const [selected, setSelected] = useState("Select an option");
+  const updateSelectedPlayers = (pos, e) => {
+    setSelectedPlayers(prev => ({
+      ...prev,
+      [pos]: e.target.text,
+    }));
+  };
 
   return (
     
@@ -79,24 +133,10 @@ function App() {
               <label>
                 
                 {pos}: <PlayerDropDown onClick = {(e) => {
-                  handleChange(pos, e);
-                  selectedPlayers[pos] = e.target.text;
-                  console.log(selectedPlayers);
+                  updateSelectedPlayers(pos, e);
                 }
                 }{...playersByPosition[pos]}></PlayerDropDown>
-                
-                {/* <select
-                  value={selectedPlayers[pos]}
-                  onChange={(e) => handleChange(pos, e)}
-                  style={{ marginLeft: '10px', padding: '5px' }}
-                > */}
-                  {/* <option value="">Select a player</option>
-                  // {playersByPosition[pos].map((player) => (
-                  //   <option key={player} value={player}>
-                  //     {player}
-                  //   </option>
-                  // ))}
-                </select> */}
+
               </label>
             </div>
           ))}
@@ -126,7 +166,16 @@ function App() {
             </tbody>
           </Table>
           <Button
-            onClick={() => setShowComparison(false)}
+            onClick={() => {
+              setShowComparison(false);
+              setSelectedPlayers({
+                PG: '',
+                SG: '',
+                SF: '',
+                PF: '',
+                C: '',
+              });}
+            }
             style={{ marginTop: '20px', padding: '10px 15px', cursor: 'pointer' }}
           >
             Go Back
@@ -141,3 +190,4 @@ function App() {
 
 
 export default App
+
